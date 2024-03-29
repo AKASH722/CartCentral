@@ -1,4 +1,5 @@
-let categoryButtons = document.querySelectorAll('.categories button');
+function category() {
+    let categoryButtons = document.querySelectorAll('.categories button');
 
 categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -16,6 +17,9 @@ categoryButtons.forEach(button => {
     });
 });
 categoryButtons.item(0).click()
+}
+
+category()
 
 async function productPage(element) {
     const productId = parseInt(element.getAttribute("data-product-id"));

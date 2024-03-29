@@ -1,12 +1,13 @@
 import os
-from datetime import datetime
+import random
+from datetime import datetime, timedelta
 
 from flask import redirect, render_template, url_for, request, jsonify, send_from_directory
 from jinja2 import ChoiceLoader, FileSystemLoader
 from werkzeug.utils import secure_filename
 
 from connection import CC, db
-from models import Customer, Category, Subcategory, Admin, Merchant, Product, Cart, Orders, Spec, Image
+from models import Customer, Category, Subcategory, Admin, Merchant, Product, Cart, Orders, Spec, Image, Sale
 
 template_folders = [
     # Customer Folders
@@ -507,6 +508,51 @@ def update_cart_quantity():
             return "Product not found in cart", 404
     except Exception as e:
         return "An error occurred while updating quantity", 500
+
+
+@CC.route("/payment/order", methods=["POST"])
+def process_order():
+    global user
+    order_data = request.json
+
+    payment_method = order_data["paymentMethod"]
+    product_id = order_data["productID"]
+    form_data = order_data["formData"]
+    delivery = datetime.now() + timedelta(days=random.randint(3, 5))
+    new_order = Orders(
+        pid=product_id,
+        cid=user.cid,
+        quantity=1,
+        price=form_data["price"],
+        status="placed",
+        deliveryaddress=form_data["delivery_address"],
+        deliverydate=delivery
+    )
+    db.session.add(new_order)
+    db.session.commit()
+    new_sale = Sale(
+        mid=Product.query.filter_by(pid=product_id).first().mid,
+        pid=product_id,
+        subcatid=Product.query.filter_by(pid=product_id).first().subcatid,
+        price=form_data["price"],
+        quantity=1,
+        deliverydate=delivery
+    )
+    db.session.add(new_sale)
+    db.session.commit()
+
+    return "Order successfully processed", 200
+
+
+@CC.route("/cancel/<int:order_id>")
+def cancel_order(order_id):
+    order = Orders.query.filter_by(oid=order_id).first()
+    if order is None or order.status != 'placed':
+        return "Invalid Order ID or the order has already been delivered.", 400
+
+    order.status = 'canceled'
+    db.session.commit()
+    return 200
 
 
 # Merchant Routes

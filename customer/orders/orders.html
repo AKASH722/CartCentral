@@ -1,86 +1,55 @@
-<link href="{{css}}" rel="stylesheet"/>
+<link href="{{css}}" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-8" id="product-list">
-        {% for order,product in products %}
-        <div class="card m-3 p-1" style="max-width: 768px">
-            <div class="row">
-                <div class="col-4 col-sm-3">
-                    <img
-                            alt="..."
-                            class="img-fluid rounded-start m-1"
-                            data-product-id="{{ product.pid }}"
-                            onclick="productPage(this)"
-                            src=" {{ url_for('serve_image', filename=product.primaryimg) }}"
-                            style="max-width: 100%; height: auto"
-                    />
-                </div>
-                <div class="col-8 col-sm-9">
-                    <div class="card-body">
-                        <div data-product-id="{{ product.pid }}">
-                            <h5 class="card-title">{{ product.title }}</h5>
-                            <p
-                                    class="product-description card-text"
-                                    style="font-size: 0.75rem"
-                            >
-                                {{ product.description }}
-                            </p>
-                        </div>
-                        <div class="card-text row">
-                            <button
-                                    class="col-5 buttons-p btn shadow m-1 m-sm-2"
-                                    data-product-id="{{ product.pid }}"
-                                    style="font-size: 0.75rem; min-width: 5.5rem"
-                                    type="button"
-                            >
-                                &#x20b9; {{product.price}}
-                            </button>
-                            <button
-                                    class="col-5 buttons-p btn shadow m-1 m-sm-2"
-                                    data-product-id="{{ product.pid }}"
-                                    style="font-size: 0.75rem; min-width: 5.5rem"
-                                    type="button"
-                            >
-                                {{order.status}}
-                            </button>
-                            <button
-                                    class="col-5 buttons-p btn shadow m-1 m-sm-2"
-                                    data-product-id="{{ product.pid }}"
-                                    style="font-size: 0.75rem; min-width: 5.5rem"
-                                    type="button"
-                            >
-                                {{order.orderdate}}
-                            </button>
-                            <button
-                                    class="col-5 buttons-p btn shadow m-1 m-sm-2"
-                                    data-product-id="{{ product.pid }}"
-                                    onclick="buynow('{{order.oid}}')"
-                                    style="font-size: 0.75rem; min-width: 5.5rem"
-                                    type="button"
-                            >
-                                Buy Again
-                            </button>
-                            <button
-                                    class="col-5 buttons-p btn shadow m-1 m-sm-2"
-                                    data-product-id="{{ product.pid }}"
-                                    onclick="cancel('{{order.cancel}}')"
-                                    style="font-size: 0.75rem; min-width: 5.5rem"
-                                    type="button"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                    class="col-5 buttons-p btn shadow m-1 m-sm-2"
-                                    data-product-id="{{ product.pid }}"
-                                    style="font-size: 0.75rem; min-width: 5.5rem"
-                                    type="button"
-                            >
-                                {{order.quantity}}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+	<div class="col-md-8" id="product-list">
+		{% for order,product in products %}
+		<div class="card m-3 p-1" style="max-width: 768px">
+			<div class="row">
+				<div class="col-4 col-sm-3">
+					<img alt="..." class="img-fluid rounded-start m-1" data-product-id="{{ product.pid }}"
+						onclick="productPage(this)" src=" {{ url_for('serve_image', filename=product.primaryimg) }}"
+						style="max-width: 100%; height: auto" />
+				</div>
+				<div class="col-8 col-sm-9">
+					<div class="card-body">
+						<div data-product-id="{{ product.pid }}">
+							<h5 class="card-title">{{ product.title }}</h5>
+							<p class="product-description card-text" style="font-size: 0.75rem">
+								{{ product.description }}
+							</p>
+						</div>
+						<div class="card-text d-flex flex-wrap justify-content-around">
+							<strong class="" data-product-id="{{ product.pid }}"
+								style="font-size: 0.75rem; min-width: 5.5rem">
+								&#x20b9; {{product.price}}
+							</strong>
+							<p class="" data-product-id="{{ product.pid }}"
+								style="font-size: 0.75rem; min-width: 5.5rem">
+								<strong>Date:</strong> {{order.orderdate.date()}}
+							</p>
+							<p class="" data-product-id="{{ product.pid }}"
+								style="font-size: 0.75rem; min-width: 5.5rem">
+								<strong>Qnt:</strong> {{order.quantity}}
+							</p>
+							<!-- <button class="col-5 buttons-p btn shadow m-1 m-sm-2" data-product-id="{{ product.pid }}"
+								style="font-size: 0.75rem; min-width: 5.5rem" type="button">
+								{{order.status}}
+							</button> -->
+						</div>
+						<div class="card-text">
+							<button class="col-5 buttons-p btn shadow m-1 m-sm-2" data-product-id="{{ product.pid }}"
+								onclick="buynow(this)" style="font-size: 0.75rem; min-width: 5.5rem" type="button">
+								Buy Again
+							</button>
+							<button class="col-5 buttons-p btn shadow m-1 m-sm-2" data-product-id="{{ product.pid }}"
+								data-order-id="{{order.oid}}"
+								onclick="cancel(this)" style="font-size: 0.75rem; min-width: 5.5rem" type="button">
+								Cancel
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
 </div>

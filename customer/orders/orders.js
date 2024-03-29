@@ -8,27 +8,21 @@ async function productPage(element) {
     dataArea.appendChild(script);
 }
 
-function addToCart(button) {
+function cancel(button) {
     const productId = button.getAttribute("data-product-id");
-    console.log("Add to Cart clicked for productList ID:", productId);
+    console.log("Cancel Order clicked for productList ID:", productId);
+    const orderId = button.getAttribute("data-order-id");
+    console.log("Cancel Order clicked for productList ID:", orderId);
+
 }
 
-function buyNow(button) {
+async function buynow(button) {
     const productId = button.getAttribute("data-product-id");
     console.log("Buy Now clicked for productList ID:", productId);
-}
-
-const showFiltersBtn = document.getElementById('showFiltersBtn');
-const filtersAccordion = document.getElementById('filtersAccordion');
-let isFiltersVisible = false;
-
-function showHide() {
-    if (!isFiltersVisible) {
-        filtersAccordion.style.display = 'block';
-        showFiltersBtn.textContent = 'Hide Filters';
-    } else {
-        filtersAccordion.style.display = 'none';
-        showFiltersBtn.textContent = 'Show Filters';
-    }
-    isFiltersVisible = !isFiltersVisible;
+    let data = await fetch("/buynow/" + productId);
+    data = await data.json();
+    dataArea.innerHTML = data["template"];
+    let script = document.createElement("script");
+    script.src = data["jsUrl"]
+    dataArea.appendChild(script);
 }
