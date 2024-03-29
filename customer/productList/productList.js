@@ -32,11 +32,11 @@ async function buyNow(button) {
     dataArea.appendChild(script);
 }
 
-const showFiltersBtn = document.getElementById('showFiltersBtn');
-const filtersAccordion = document.getElementById('filtersAccordion');
 let isFiltersVisible = false;
 
 function showHide() {
+    const showFiltersBtn = document.getElementById('showFiltersBtn');
+    const filtersAccordion = document.getElementById('filtersAccordion');
     if (!isFiltersVisible) {
         filtersAccordion.style.display = 'block';
         showFiltersBtn.textContent = 'Hide Filters';
