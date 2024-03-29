@@ -1,7 +1,5 @@
-let specFieldIndex = 0;
-let imageFieldIndex = 0;
-
 function addSpecField() {
+    let specFieldIndex = 0;
     const specFieldsContainer = document.getElementById('specFields');
     const specField = document.createElement('div');
     specField.classList.add('mb-3');
@@ -23,6 +21,7 @@ function addSpecField() {
 }
 
 function addImageField() {
+    let imageFieldIndex = 0;
     const imageFieldsContainer = document.getElementById('imageFields');
     const imageField = document.createElement('div');
     imageField.classList.add('mb-3');
