@@ -1,0 +1,91 @@
+@media (max-width: 576px) {
+    .product-description {
+        display: none;
+    }
+}
+
+:root {
+    --bg: #e3fdfd;
+    --border: #91c8e4;
+    --btn: #749bc2;
+    --hover: #4682a9;
+    --text: #71c9ce;
+}
+
+body {
+    background: var(--bg);
+}
+
+.buttons:hover {
+    background: var(--border);
+    color: #FFFFFF;
+}
+
+
+/* Sidebar Styles */
+#filtersAccordion {
+    margin-bottom: 20px;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+}
+
+.accordion-button {
+    background-color: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.accordion-button:hover {
+    background-color: var(--hover);
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+    border-bottom: 1px solid var(--border);
+}
+
+.accordion-body {
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    border-top: none;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+.form-check-label {
+    color: var(--text);
+}
+
+/* Adjust width of sidebar on smaller screens */
+@media (max-width: 768px) {
+    #filtersAccordion {
+        display: none;
+    }
+
+    .col-md-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    #filtersAccordion {
+        display: block;
+    }
+}
+
+.col-md-3 {
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+#filtersAccordion {
+    padding-top: 10px;
+}
