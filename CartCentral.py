@@ -136,7 +136,6 @@ def getCatagories():
             "jsUrl": url_for("static", filename="category.js")
         })
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -151,7 +150,6 @@ def addCategory():
                                category=Category.query.filter_by(categorytype=data["categoryType"]).first(),
                                totalproducts=0)
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -165,7 +163,6 @@ def addSubcategory():
         return render_template("subcatTemplate.html",
                                sub=Subcategory().query.filter_by(categoryname=data["categoryName"]).first())
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -183,7 +180,6 @@ def updateCategory():
         CC.static_folder = "admin/category"
         return ""
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -198,7 +194,6 @@ def updateSubcategory():
 
         return ""
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -211,7 +206,6 @@ def removeCategory():
 
         return ""
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -224,7 +218,6 @@ def removeSubcategory():
 
         return ""
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -312,7 +305,6 @@ def home():
             js=url_for("static", filename="home.js"),
         )
     except Exception as e:
-        print(e)
         return "An error occurred while rendering the home page.", 200
 
 
@@ -331,7 +323,6 @@ def orders():
             "jsUrl": url_for("static", filename="orders.js"),
         })
     except Exception as e:
-        print(e)
         return "Pass"
 
 
@@ -357,7 +348,7 @@ def changeUserData():
         db.session.commit()
 
     except Exception as e:
-        print(e)
+        return "pass"
     return "Pass"
 
 
@@ -381,7 +372,6 @@ def cart():
             }
         )
     except Exception as e:
-        print(e)
         return "Pass"
 
 
@@ -393,8 +383,6 @@ def addToCart(product_id):
         db.session.commit()
         return redirect("/customer/cart")
     except Exception as e:
-        # Handle any errors that might occur during the process
-        print("Error occurred:", str(e))
         return "An error occurred while adding the product to the cart", 500
 
 
@@ -423,7 +411,6 @@ def products_list(subcat_id):
             "jsUrl": url_for("static", filename="productList.js")
         })
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -439,7 +426,6 @@ def products(product_id):
             "jsUrl": url_for("static", filename="product.js")
         })
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -453,7 +439,6 @@ def home_products():
             "jsUrl": url_for("static", filename="homeProduct.js")
         })
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -475,7 +460,6 @@ def buynow(product_id):
             }
         )
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -657,7 +641,6 @@ def merchantSales():
                 "totalProducts": totalproducts,
                 "totalPrice": totalprice
             }
-    print(categories)
     return jsonify({
         "template": render_template(
             "merchantSales.html",
@@ -678,7 +661,6 @@ def save_product():
     # category = request.form['productCategory']
     subcategory = request.form['productSubcategory']
     images = request.files.getlist('image')  # Use getlist to get multiple files
-    print(images)
     specs = {}
     for key, value in request.form.items():
         if key.startswith('specName_'):
@@ -713,7 +695,6 @@ def save_product():
 
         return redirect('/merchant/home')
     except Exception as ignored:
-        print(ignored)
         return redirect('/merchant/home')
 
 
@@ -727,7 +708,6 @@ def merchant_products_list():
             "jsUrl": url_for("static", filename="products.js")
         })
     except Exception as e:
-        print(e)
         return "Error", 200
 
 
@@ -745,7 +725,6 @@ def add_product():
             "jsUrl": url_for("static", filename="addEditProduct.js")
         })
     except Exception as e:
-        print(e)
         return "Error", 200
 
 

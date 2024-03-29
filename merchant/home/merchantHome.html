@@ -40,12 +40,11 @@
         >
             <nav class="navbar-nav d-md-flex flex-md-column" style="width: 100%">
                 <button
-                        class="buttons nav-item btn bg-transparent shadow m-3 active"
-                        id="prof"
-                        onclick="getSalesData(this)"
+                        class="buttons nav-item btn bg-transparent shadow m-3"
+                        onclick="getProductsData(this)"
                         type="button"
                 >
-                    Sales
+                    Products
                 </button>
                 <button
                         class="buttons nav-item btn bg-transparent shadow m-3"
@@ -55,11 +54,12 @@
                     Add Product
                 </button>
                 <button
-                        class="buttons nav-item btn bg-transparent shadow m-3"
-                        onclick="getProductsData(this)"
+                        class="buttons nav-item btn bg-transparent shadow m-3 active"
+                        id="prof"
+                        onclick="getSalesData(this)"
                         type="button"
                 >
-                    Products
+                    Sales
                 </button>
                 <button
                         class="buttons nav-item btn bg-transparent shadow m-3 active"
