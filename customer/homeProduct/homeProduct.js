@@ -1,22 +1,22 @@
 function category() {
     let categoryButtons = document.querySelectorAll('.categories button');
 
-categoryButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const categoryId = button.id; // Get the ID of the clicked category button
-        const products = document.querySelectorAll('.sub-cat'); // Get all sub-category product containers
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const categoryId = button.id; // Get the ID of the clicked category button
+            const products = document.querySelectorAll('.sub-cat'); // Get all sub-category product containers
 
-        // Loop through each sub-category product container
-        products.forEach(product => {
-            if (product.classList.contains(categoryId)) {
-                product.style.display = 'block'; // Display products of the clicked category
-            } else {
-                product.style.display = 'none'; // Hide products of other categories
-            }
+            // Loop through each sub-category product container
+            products.forEach(product => {
+                if (product.classList.contains(categoryId)) {
+                    product.style.display = 'block'; // Display products of the clicked category
+                } else {
+                    product.style.display = 'none'; // Hide products of other categories
+                }
+            });
         });
     });
-});
-categoryButtons.item(0).click()
+    categoryButtons.item(0).click()
 }
 
 category()
