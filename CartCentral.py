@@ -357,21 +357,20 @@ def cart():
     global user
     CC.static_folder = "customer/cart"
     db.session.add(user)
+    cp = db.session.query(Cart,Product).join(Product, Cart.pid == Product.pid).filter(user.cid == Cart.cid).all()
     try:
         return jsonify(
             {
                 "template": render_template(
                     "cart.html",
-                    products=db.session.query(Product)
-                    .join(Cart, Cart.pid == Product.pid)
-                    .filter(user.cid == Cart.cid)
-                    .all(),
+                    products=cp,
                     css=url_for("static", filename="cart.css"),
                 ),
                 "jsUrl": url_for("static", filename="cart.js"),
             }
         )
     except Exception as e:
+        print(e)
         return "Pass"
 
 
@@ -531,6 +530,8 @@ def process_order():
 @CC.route("/cancel/<int:order_id>")
 def cancel_order(order_id):
     order = Orders.query.filter_by(oid=order_id).first()
+    db.session.delete(order)
+    db.session.commit()
     if order is None or order.status != 'placed':
         return "Invalid Order ID or the order has already been delivered.", 400
 

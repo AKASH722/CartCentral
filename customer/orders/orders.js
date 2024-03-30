@@ -8,12 +8,9 @@ async function productPage(element) {
     dataArea.appendChild(script);
 }
 
-function cancel(button) {
-    const productId = button.getAttribute("data-product-id");
-    console.log("Cancel Order clicked for productList ID:", productId);
-    const orderId = button.getAttribute("data-order-id");
-    console.log("Cancel Order clicked for productList ID:", orderId);
-
+async function cancel(button) {
+    const order = button.getAttribute("data-order-id");
+    await fetch("/cancel/"+order);
 }
 
 async function buynow(button) {

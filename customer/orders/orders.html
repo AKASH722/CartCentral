@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-8" id="product-list">
         {% for order,product in products %}
-        <div class="card m-3 p-1" style="max-width: 768px">
+        <div id="{{order.oid}} class="card m-3 p-1" style="max-width: 768px">
             <div class="row">
                 <div class="col-4 col-sm-3">
                     <img alt="..." class="img-fluid rounded-start m-1" data-product-id="{{ product.pid }}"

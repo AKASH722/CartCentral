@@ -9,24 +9,12 @@ function setActive(button) {
 }
 
 function animate(data) {
-    dataArea.classList.add("loader");
-    setTimeout(async () => {
-        dataArea.innerHTML = await data["template"];
-        let script = document.createElement("script");
-        script.src = data["jsUrl"];
-        dataArea.appendChild(script);
-    }, 1000);
-
-    setTimeout(() => {
-        dataArea.classList.remove("loader");
-    }, 2000);
+    let script = document.createElement("script");
+    script.src = data["jsUrl"];
+    dataArea.innerHTML = data["template"];
+    dataArea.appendChild(script);
 }
 
-async function getOffersData(currentButton) {
-    setActive(currentButton);
-    let data = await fetch("/admin/offers");
-    animate(await data.json());
-}
 
 async function getSalesData(currentButton) {
     setActive(currentButton);
