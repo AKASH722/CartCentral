@@ -10,7 +10,7 @@ async function productPage(element) {
 
 async function cancel(button) {
     const order = button.getAttribute("data-order-id");
-    await fetch("/cancel/"+order);
+    await fetch("/cancel/" + order);
 }
 
 async function buynow(button) {

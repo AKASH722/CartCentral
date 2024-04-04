@@ -357,7 +357,7 @@ def cart():
     global user
     CC.static_folder = "customer/cart"
     db.session.add(user)
-    cp = db.session.query(Cart,Product).join(Product, Cart.pid == Product.pid).filter(user.cid == Cart.cid).all()
+    cp = db.session.query(Cart, Product).join(Product, Cart.pid == Product.pid).filter(user.cid == Cart.cid).all()
     try:
         return jsonify(
             {
@@ -758,6 +758,22 @@ def delete_product(product_id):
             return jsonify({"error": "Product not found"}), 404
     except Exception as e:
         return jsonify({"error": "Internal Server Error"}), 500
+
+
+@CC.route("/profile/check", methods=["POST"])
+def profile_check():
+    global user
+    data = request.json
+    jsjson = {"hasUsername": False, "hasEmail": False, "validPassword": False, "hasPassword": False}
+    if data["username"] and data["username"] != user.username:
+        jsjson["hasUsername"] = (Customer.query.filter(Customer.username == data["username"]).first() is not None)
+    if data["password"] and data["password"] != user.password:
+        jsjson["hasPassword"] = (Customer.query.filter(Customer.password == data["currPassword"]).first() is not None)
+    if data["email"] and data["email"] != user.email:
+        jsjson["hasEmail"] = (Customer.query.filter(Customer.email == data["email"]).first() is not None)
+
+    jsjson["validPassword"] = (data["currPassword"] and data["currPassword"] != user.password)
+    return jsonify(jsjson)
 
 
 if __name__ == '__main__':
