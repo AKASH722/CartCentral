@@ -68,7 +68,7 @@ def toAdmin():
 @CC.route("/login/admin", methods=["POST"])
 def adminLogin():
     global admin
-    admin = Admin.query.filter(Admin.username == request.form["username"]).first();
+    admin = Admin.query.filter(Admin.username == request.form["username"]).first()
     return redirect("/admin/home")
 
 
@@ -76,11 +76,11 @@ def adminLogin():
 def adminCheck():
     if "password" in request.json:
         return jsonify({
-            "hasUser": Admin.query.filter(Admin.password == request.json["password"]).first() != None
+            "hasUser": Admin.query.filter(Admin.password == request.json["password"]).first() is not None
         })
     if "username" in request.json:
         return jsonify({
-            "hasUser": Admin.query.filter(Admin.username == request.json["username"]).first() != None
+            "hasUser": Admin.query.filter(Admin.username == request.json["username"]).first() is not None
         })
     return jsonify({"hasUser": False})
 
@@ -261,9 +261,9 @@ def customerRegistetCheck():
     data = request.json
     jsjson = {"hasUsername": False, "hasEmail": False}
     if data["username"] != "":
-        jsjson["hasUsername"] = Customer.query.filter(Customer.username == data["username"]).first() != None
+        jsjson["hasUsername"] = Customer.query.filter(Customer.username == data["username"]).first() is not None
     if data["email"] != "":
-        jsjson["hasEmail"] = Customer.query.filter(Customer.email == data["email"]).first() != None
+        jsjson["hasEmail"] = Customer.query.filter(Customer.email == data["email"]).first() is not None
     return jsonify(jsjson)
 
 
@@ -279,11 +279,11 @@ def registerUser():
 def customerLoginCheck():
     if "password" in request.json:
         return jsonify({
-            "hasUser": Customer.query.filter(Customer.password == request.json["password"]).first() != None
+            "hasUser": Customer.query.filter(Customer.password == request.json["password"]).first() is not None
         })
     if "username" in request.json:
         return jsonify({
-            "hasUser": Customer.query.filter(Customer.username == request.json["username"]).first() != None
+            "hasUser": Customer.query.filter(Customer.username == request.json["username"]).first() is not None
         })
     return jsonify({"hasUser": False})
 
