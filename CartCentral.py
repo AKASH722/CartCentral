@@ -378,7 +378,11 @@ def cart():
 def addToCart(product_id):
     global user
     try:
-        db.session.add(Cart(cid=user.cid, pid=product_id, quantity=1))
+        cart_item = Cart.query.filter_by(pid=product_id, cid=user.cid).first()
+        if cart_item:
+            cart_item.quantity += 1
+        else:
+            db.session.add(Cart(cid=user.cid, pid=product_id, quantity=1))
         db.session.commit()
         return redirect("/customer/cart")
     except Exception as e:
@@ -465,7 +469,7 @@ def buynow(product_id):
 @CC.route("/removeCart/<int:product_id>", methods=["POST"])
 def remove_from_cart(product_id):
     try:
-        cart_item = Cart.query.filter_by(pid=product_id).first()
+        cart_item = Cart.query.filter_by(pid=product_id, cid=user.cid).first()
         if cart_item:
             db.session.delete(cart_item)
             db.session.commit()
@@ -482,7 +486,7 @@ def update_cart_quantity():
         data = request.json
         product_id = data.get("productId")
         quantity = data.get("quantity")
-        cart_item = Cart.query.filter_by(pid=product_id).first()
+        cart_item = Cart.query.filter_by(pid=product_id, cid=user.cid).first()
         if cart_item:
             cart_item.quantity = quantity
             db.session.commit()

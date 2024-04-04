@@ -38,38 +38,16 @@ function card() {
     let cards = document.querySelectorAll(".cart-products .card");
     cards.forEach((card) => {
         handleUpdateQuantity(card);
-        const removeButton = card.querySelector(".cart-btn");
-        removeButton.addEventListener("click", async () => {
-            await fetch("/customer/cart/remove", {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    toberemoved: card.getAttribute("data-product-id"),
-                }),
-            });
-            card.parentNode.removeChild(card);
+        card.querySelector(".cart-btn").addEventListener("click", function () {
+            removeFromCart(this);
         });
     });
-}
-
-async function buyNow(button) {
-    console.log(button)
-    const productId = button.getAttribute("data-product-id");
-    console.log("Buy Now clicked for productList ID:", productId);
-    let data = await fetch("/buynow/" + productId);
-    data = await data.json();
-    dataArea.innerHTML = data["template"];
-    let script = document.createElement("script");
-    script.src = data["jsUrl"]
-    dataArea.appendChild(script);
 }
 
 async function removeFromCart(button) {
     try {
         let productId = button.getAttribute("data-product-id");
-
+        console.log(productId);
         const response = await fetch("/removeCart/" + productId, {
             method: 'POST',
             headers: {
@@ -86,6 +64,19 @@ async function removeFromCart(button) {
     } catch (error) {
         console.error('Error while removing product from cart:', error);
     }
+}
+
+
+async function buyNow(button) {
+    console.log(button)
+    const productId = button.getAttribute("data-product-id");
+    console.log("Buy Now clicked for productList ID:", productId);
+    let data = await fetch("/buynow/" + productId);
+    data = await data.json();
+    dataArea.innerHTML = data["template"];
+    let script = document.createElement("script");
+    script.src = data["jsUrl"]
+    dataArea.appendChild(script);
 }
 
 card()
