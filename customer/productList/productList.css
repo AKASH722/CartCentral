@@ -21,8 +21,11 @@ body {
     color: #FFFFFF;
 }
 
+#applyButton {
+    background: var(--hover);
+    color: var(--bg);
+}
 
-/* Sidebar Styles */
 #filtersAccordion {
     margin-bottom: 20px;
 }
@@ -63,24 +66,6 @@ body {
     color: var(--text);
 }
 
-/* Adjust width of sidebar on smaller screens */
-@media (max-width: 768px) {
-    #filtersAccordion {
-        display: none;
-    }
-
-    .col-md-3 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-}
-
-@media (min-width: 768px) {
-    #filtersAccordion {
-        display: block;
-    }
-}
-
 .col-md-3 {
     margin-top: 10px;
     margin-left: 20px;
@@ -88,4 +73,22 @@ body {
 
 #filtersAccordion {
     padding-top: 10px;
+}
+
+#product-list {
+    max-height: 95vh;
+    overflow: auto;
+}
+
+#product-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+#product-list::-webkit-scrollbar-thumb {
+    background: var(--btn);
+    border-radius: 2%;
+}
+
+#product-list::-webkit-scrollbar-corner {
+    background: transparent;
 }

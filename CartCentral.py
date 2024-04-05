@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from flask import redirect, render_template, url_for, request, jsonify, send_from_directory
 from jinja2 import ChoiceLoader, FileSystemLoader
+from sqlalchemy import and_
 from werkzeug.utils import secure_filename
 
 from connection import CC, db
@@ -404,8 +405,9 @@ def products_list(subcat_id):
 
         if category_id not in specs:
             specs[category_id] = {'name': category, 'values': []}
-
-        specs[category_id]['values'].append({'value': value, 'id': value_id})
+        values = specs[category_id]['values']
+        valuedict = {'value': value, 'id': value_id}
+        if valuedict not in values: specs[category_id]['values'].append(valuedict)
     try:
         CC.static_folder = "customer/productList"
         return jsonify({
@@ -415,6 +417,18 @@ def products_list(subcat_id):
         })
     except Exception as e:
         return "Error", 200
+
+
+@CC.route("/products/filter", methods=["POST"])
+def filter():
+    data = request.json
+    results = set({})
+    for key, value_list in data.items():
+        q = Product.query.join(Spec, and_(Product.pid == Spec.pid, Spec.name == key))
+        for value in value_list:
+            results = results.intersection(q.filter(Spec.value == value).all()) if len(results) != 0 else set(
+                q.filter(Spec.value == value).all())
+    return render_template("forProductsOnly.html", products=results)
 
 
 @CC.route("/products/<int:product_id>")
