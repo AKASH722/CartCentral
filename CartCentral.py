@@ -450,14 +450,20 @@ def buynow(product_id):
     global user
     try:
         CC.static_folder = "customer/buynow"
+        product = Product.query.filter_by(pid=product_id).first()
+        quantity = 1
+        existing_cart_item = Cart.query.filter_by(cid=user.cid, pid=product_id).first()
+        if existing_cart_item is not None:
+            quantity = existing_cart_item.quantity
         return jsonify(
             {
                 "template": render_template(
                     "buyNow.html",
-                    product=Product.query.filter_by(pid=product_id).first(),
+                    product=product,
                     address=user.address,
                     css=url_for("static", filename="buyNow.css"),
                     images=Image.query.filter_by(pid=product_id),
+                    quantity=quantity
                 ),
                 "jsUrl": url_for("static", filename="buyNow.js"),
             }
@@ -499,36 +505,39 @@ def update_cart_quantity():
 
 @CC.route("/payment/order", methods=["POST"])
 def process_order():
-    global user
-    order_data = request.json
+    try:
+        global user
+        order_data = request.json
+        payment_method = order_data["paymentMethod"]
+        product_id = order_data["productID"]
+        form_data = order_data["formData"]
+        quantity = form_data["quantity"]
+        delivery = datetime.now() + timedelta(days=random.randint(3, 5))
+        new_order = Orders(
+            pid=product_id,
+            cid=user.cid,
+            quantity=quantity,
+            price=form_data["price"],
+            status="placed",
+            deliveryaddress=form_data["delivery_address"],
+            deliverydate=delivery
+        )
+        db.session.add(new_order)
+        db.session.commit()
+        new_sale = Sale(
+            mid=Product.query.filter_by(pid=product_id).first().mid,
+            pid=product_id,
+            subcatid=Product.query.filter_by(pid=product_id).first().subcatid,
+            price=form_data["price"],
+            quantity=quantity,
+            deliverydate=delivery
+        )
+        db.session.add(new_sale)
+        db.session.commit()
 
-    payment_method = order_data["paymentMethod"]
-    product_id = order_data["productID"]
-    form_data = order_data["formData"]
-    delivery = datetime.now() + timedelta(days=random.randint(3, 5))
-    new_order = Orders(
-        pid=product_id,
-        cid=user.cid,
-        quantity=1,
-        price=form_data["price"],
-        status="placed",
-        deliveryaddress=form_data["delivery_address"],
-        deliverydate=delivery
-    )
-    db.session.add(new_order)
-    db.session.commit()
-    new_sale = Sale(
-        mid=Product.query.filter_by(pid=product_id).first().mid,
-        pid=product_id,
-        subcatid=Product.query.filter_by(pid=product_id).first().subcatid,
-        price=form_data["price"],
-        quantity=1,
-        deliverydate=delivery
-    )
-    db.session.add(new_sale)
-    db.session.commit()
-
-    return "Order successfully processed", 200
+        return jsonify({"success": True, "message": "Order placed successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "message": "Failed to process the order"}), 500
 
 
 @CC.route("/cancel/<int:order_id>")
