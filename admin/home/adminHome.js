@@ -46,4 +46,4 @@ function getHomeData(currentButton) {
     }, 2000);
 }
 
-getProfileData(document.getElementById("cat"));
+getSalesData(document.getElementById("cat"));

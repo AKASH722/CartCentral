@@ -9,8 +9,15 @@ async function productPage(element) {
 }
 
 async function cancel(button) {
-    const order = button.getAttribute("data-order-id");
-    await fetch("/cancel/" + order);
+    const orderId = button.getAttribute("data-order-id");
+    let confirm = await fetch("/cancel/" + orderId);
+    confirm = confirm.text();
+    if (Boolean(confirm)) {
+        let order = document.getElementById(orderId);
+        order.parentElement.removeChild(order);
+    } else {
+        alert("Error");
+    }
 }
 
 async function buynow(button) {

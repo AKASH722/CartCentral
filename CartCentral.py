@@ -56,7 +56,7 @@ def main(): return redirect("/customer")
 
 #  Admin Routes
 @CC.route("/admin")
-def toAdmin():
+def to_admin():
     CC.static_folder = "admin/login"
     return render_template(
         "login.html",
@@ -67,14 +67,14 @@ def toAdmin():
 
 
 @CC.route("/login/admin", methods=["POST"])
-def adminLogin():
+def admin_login():
     global admin
     admin = Admin.query.filter(Admin.username == request.form["username"]).first()
     return redirect("/admin/home")
 
 
 @CC.route("/login/admin/check", methods=["POST"])
-def adminCheck():
+def admin_check():
     if "password" in request.json:
         return jsonify({
             "hasUser": Admin.query.filter(Admin.password == request.json["password"]).first() is not None
@@ -87,7 +87,7 @@ def adminCheck():
 
 
 @CC.route("/admin/home")
-def adminHome():
+def admin_home():
     CC.static_folder = "admin/home"
     return render_template(
         "adminHome.html",
@@ -98,7 +98,7 @@ def adminHome():
 
 
 @CC.route("/admin/sales")
-def adminSales():
+def admin_sales():
     CC.static_folder = "admin/sales"
     categories = Category().query.all()
     subcatdata = {}
@@ -121,7 +121,7 @@ def adminSales():
 
 
 @CC.route("/admin/category")
-def getCatagories():
+def get_catagories():
     try:
         CC.static_folder = "admin/category"
         categories = Category().query.all()
@@ -141,7 +141,7 @@ def getCatagories():
 
 
 @CC.route("/admin/addCategory", methods=["POST"])
-def addCategory():
+def add_category():
     data = request.json
     try:
         db.session.add(Category(categorytype=data["categoryType"]))
@@ -155,7 +155,7 @@ def addCategory():
 
 
 @CC.route("/admin/addSubcategory", methods=["POST"])
-def addSubcategory():
+def add_subcategory():
     data = request.json
     try:
         db.session.add(Subcategory(catid=data["catId"], categoryname=data["categoryName"]))
@@ -168,7 +168,7 @@ def addSubcategory():
 
 
 @CC.route("/admin/updateCategory", methods=["POST"])
-def updateCategory():
+def update_category():
     data = request.json
     try:
         category = Category.query.filter(Category.catid == data["catId"]).first()
@@ -185,7 +185,7 @@ def updateCategory():
 
 
 @CC.route("/admin/updateSubcategory", methods=["POST"])
-def updateSubcategory():
+def update_subcategory():
     data = request.json
     try:
         subcategory = Subcategory.query.filter(Subcategory.subcatid == data["subCatId"]).first()
@@ -199,7 +199,7 @@ def updateSubcategory():
 
 
 @CC.route("/admin/removeCategory", methods=["POST"])
-def removeCategory():
+def remove_category():
     data = request.json
     try:
         db.session.delete(Category.query.filter(Category.catid == data["catId"]).first())
@@ -211,7 +211,7 @@ def removeCategory():
 
 
 @CC.route("/admin/removeSubcategory", methods=["POST"])
-def removeSubcategory():
+def remove_subcategory():
     data = request.json
     try:
         db.session.delete(Subcategory.query.filter(Subcategory.subcatid == data["subCatId"]).first())
@@ -223,7 +223,7 @@ def removeSubcategory():
 
 
 @CC.route("/admin/profile")
-def adminProfile():
+def admin_profile():
     global admin
     CC.static_folder = "admin/profile"
     db.session.add(admin)
@@ -235,7 +235,7 @@ def adminProfile():
 
 
 @CC.route("/admin/changedata", methods=["POST"])
-def changeAdminData():
+def change_admin_data():
     global admin
     changeddata = request.json["changedData"]
     for key, value in changeddata.items(): setattr(admin, key, value)
@@ -258,7 +258,7 @@ def customer():
 
 
 @CC.route("/register/customer/check", methods=["POST"])
-def customerRegistetCheck():
+def customer_register_check():
     data = request.json
     jsjson = {"hasUsername": False, "hasEmail": False}
     if data["username"] != "":
@@ -269,7 +269,7 @@ def customerRegistetCheck():
 
 
 @CC.route("/register/user", methods=["POST"])
-def registerUser():
+def register_user():
     db.session.add(
         Customer(username=request.form["username"], password=request.form["password"], email=request.form["email"]))
     db.session.commit()
@@ -277,7 +277,7 @@ def registerUser():
 
 
 @CC.route("/login/customer/check", methods=["POST"])
-def customerLoginCheck():
+def customer_login_check():
     if "password" in request.json:
         return jsonify({
             "hasUser": Customer.query.filter(Customer.password == request.json["password"]).first() is not None
@@ -290,7 +290,7 @@ def customerLoginCheck():
 
 
 @CC.route("/login/user", methods=["POST"])
-def loginUser():
+def login_user():
     global user
     user = Customer.query.filter(Customer.username == request.form["username"]).first()
     return redirect("/customer/home")
@@ -341,7 +341,7 @@ def profile():
 
 
 @CC.route("/customer/changedata", methods=["POST"])
-def changeUserData():
+def change_user_data():
     changeddata = request.json["changedData"]
     for key, value in changeddata.items(): setattr(user, key, value)
     try:
@@ -376,7 +376,7 @@ def cart():
 
 
 @CC.route("/addCart/<int:product_id>")
-def addToCart(product_id):
+def add_to_Cart(product_id):
     global user
     try:
         cart_item = Cart.query.filter_by(pid=product_id, cid=user.cid).first()
@@ -420,7 +420,7 @@ def products_list(subcat_id):
 
 
 @CC.route("/products/filter", methods=["POST"])
-def filter():
+def filter_():
     data = request.json
     results = set({})
     for key, value_list in data.items():
@@ -460,7 +460,7 @@ def home_products():
 
 
 @CC.route("/buynow/<int:product_id>")
-def buynow(product_id):
+def buy_now(product_id):
     global user
     try:
         CC.static_folder = "customer/buynow"
@@ -556,21 +556,25 @@ def process_order():
 
 @CC.route("/cancel/<int:order_id>")
 def cancel_order(order_id):
-    order = Orders.query.filter_by(oid=order_id).first()
-    db.session.delete(order)
-    db.session.commit()
-    if order is None or order.status != 'placed':
-        return "Invalid Order ID or the order has already been delivered.", 400
+    try:
+        order = Orders.query.filter_by(oid=order_id).first()
+        db.session.delete(order)
+        db.session.commit()
+        if order is None or order.status != 'placed':
+            return "Invalid Order ID or the order has already been delivered.", 400
 
-    order.status = 'canceled'
-    db.session.commit()
-    return 200
+        order.status = 'canceled'
+        db.session.commit()
+        return "True", 200
+    except Exception as e:
+        print(e)
+        return "False", 500
 
 
 # Merchant Routes
 
 @CC.route("/merchant")
-def tomerchant():
+def to_merchant():
     CC.static_folder = "merchant/sign_up-in"
     return render_template(
         "merchantSignup.html",
@@ -581,7 +585,7 @@ def tomerchant():
 
 
 @CC.route("/register/merchant/check", methods=["POST"])
-def registerMerchantCheck():
+def register_merchant_check():
     data = request.json
     jsjson = {"hasUsername": False, "hasEmail": False}
     if data["username"] != "":
@@ -592,7 +596,7 @@ def registerMerchantCheck():
 
 
 @CC.route("/register/merchant", methods=["POST"])
-def registerMerchant():
+def register_merchant():
     db.session.add(
         Merchant(username=request.form["username"], gstnum=request.form["gstnum"], password=request.form["password"],
                  email=request.form["email"]))
@@ -601,14 +605,14 @@ def registerMerchant():
 
 
 @CC.route("/login/merchant", methods=["POST"])
-def loginMerchant():
+def login_merchant():
     global merchant
     merchant = Merchant.query.filter(Merchant.username == request.form["username"]).first()
     return redirect("/merchant/home")
 
 
 @CC.route("/merchant/home")
-def merchantHome():
+def merchant_home():
     CC.static_folder = "merchant/home"
     return render_template(
         "merchantHome.html",
@@ -618,7 +622,7 @@ def merchantHome():
 
 
 @CC.route("/login/merchant/check", methods=["POST"])
-def merchantLoginCheck():
+def merchant_login_check():
     if "password" in request.json:
         return jsonify({
             "hasUser": Merchant.query.filter(Merchant.password == request.json["password"]).first() != None
@@ -631,7 +635,7 @@ def merchantLoginCheck():
 
 
 @CC.route("/merchant/profile")
-def merchantProfile():
+def merchant_profile():
     CC.static_folder = "merchant/profile"
     db.session.add(merchant)
     return jsonify({
@@ -643,7 +647,7 @@ def merchantProfile():
 
 
 @CC.route("/merchant/changedata", methods=["POST"])
-def changeMerchantData():
+def change_merchant_data():
     global merchant
     changeddata = request.json["changedData"]
     for key, value in changeddata.items(): setattr(merchant, key, value)
@@ -653,7 +657,7 @@ def changeMerchantData():
 
 
 @CC.route("/merchant/sales")
-def merchantSales():
+def merchant_sales():
     global merchant
     CC.static_folder = "merchant/sales"
     categories = Category().query.all()
